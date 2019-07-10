@@ -85,15 +85,63 @@ namespace SentimentAnalysis
             // accuacy on training set
             Vector<double> prediction = SvmPredic(trainingFeatures, svc);
             double accuracy = CalculateAccuracy(prediction, trainingLabel);
-            System.Console.WriteLine("Training set Accuracy: {0:f5}\n", accuracy);
+            System.Console.WriteLine("Training set Accuracy: {0:f2}%\n", accuracy);
 
 
             // accuacy on test set
             prediction = SvmPredic(testFeatures, svc);
             accuracy = CalculateAccuracy(prediction, testLabel);
-            System.Console.WriteLine("Test set Accuracy: {0:f5}\n", accuracy);
+            System.Console.WriteLine("Test set Accuracy: {0:f2}%\n", accuracy);
+
+            // F1 score
+            double f1Score = CalculateF1Score(prediction, testLabel);
+            System.Console.WriteLine("F1 Score on test set: {0:f2}%\n", f1Score * 100);
 
             //Pause();
+        }
+
+        private static double CalculateF1Score(Vector<double> prediction, Vector<double> label)
+        {
+            double precision;
+            double recall;
+            double f1Score;
+
+            double truePositives = 0;
+            double trueNegatives = 0;
+            double falseNegatives = 0;
+            double falsePositives = 0;
+
+            int m = label.Count;
+
+            for(int i = 0; i < m; i++)
+            {
+                double predicted = prediction[i];
+                double actual = label[i];
+
+                // true positives: predicted 1, actual 1
+                if(predicted == 1 && actual == 1)
+                    truePositives++;
+                
+                // true negatives: predicted 0, actual 0
+                if(predicted == 0 && actual == 0)
+                    trueNegatives++;
+
+                // false negatives: predicted 0, actual 1
+                if(predicted == 0 && actual == 1)
+                    falseNegatives++;
+
+                // false positives: predicted 1, actual 0
+                if(predicted == 1 && actual == 0)
+                    falsePositives++;
+
+            }
+
+            precision = truePositives / (truePositives + falsePositives);
+            recall = truePositives / (trueNegatives + falseNegatives);
+
+            f1Score = 2 * (precision * recall) / (precision + recall);
+
+            return f1Score;        
         }
 
         private static double CalculateAccuracy(Vector<double> prediction, Vector<double> label)

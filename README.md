@@ -30,7 +30,9 @@ obj = -16.11023335973633, rho = -0.5253018259713941
 nSV = 131, nBSV = 23
 Total nSV = 131
 
-Training set Accuracy: 97.00000
+Training set Accuracy: 97.00%
 
-Test set Accuracy: 70.00000
+Test set Accuracy: 70.00%
+
+F1 Score on test set: 92.00%
 ```
